@@ -10,9 +10,17 @@ import UIKit
 
 class TodoListViewController: UITableViewController {
     var itemArray = ["got to shopping " , "back to home " , "go to sleep "]
+    
+    let defaults = UserDefaults.standard
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+        if let items = defaults.array(forKey: "TodoListApp") as? [String] {
+            itemArray = items
+            
+        }
     }
     
     
@@ -23,6 +31,7 @@ class TodoListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     
         let cell = tableView.dequeueReusableCell(withIdentifier: "todoCell", for: indexPath)
+        
         cell.textLabel?.text = itemArray[indexPath.row]
         return cell
     }
@@ -53,6 +62,8 @@ class TodoListViewController: UITableViewController {
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             // what will happen when the user click the add button
             self.itemArray.append(textField.text!)
+        
+            self.defaults.setValue(self.itemArray, forKey: "TodoListApp")
             self.tableView.reloadData()
             
         }
